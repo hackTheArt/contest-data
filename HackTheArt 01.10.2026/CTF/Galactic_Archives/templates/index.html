@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imperial Archives | Restricted Access</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff3333; /* Imperial Red */
+            --secondary-color: #ff6666;
+            --bg-color: #020202;
+            --panel-bg: rgba(10, 10, 10, 0.95);
+            --border-color: #880000;
+            --scan-line-color: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            font-family: 'Share Tech Mono', monospace;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: 
+                radial-gradient(rgba(255,50,50,0.1) 2px, transparent 3px),
+                radial-gradient(rgba(255,50,50,0.05) 1px, transparent 2px);
+            background-size: 50px 50px, 30px 30px;
+        }
+
+        /* CRT Scanline Effect */
+        body::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 10;
+            background-size: 100% 3px, 4px 100%;
+            pointer-events: none;
+        }
+
+        .terminal-container {
+            width: 900px;
+            max-width: 95%;
+            height: 85vh;
+            background-color: var(--panel-bg);
+            border: 1px solid var(--primary-color);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.2), inset 0 0 30px rgba(255, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 5;
+            overflow: hidden;
+        }
+
+        /* Corner decorations */
+        .terminal-container::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 2px solid var(--primary-color);
+            clip-path: polygon(
+                0 10px, 10px 0, 
+                calc(100% - 10px) 0, 100% 10px, 
+                100% calc(100% - 10px), calc(100% - 10px) 100%, 
+                10px 100%, 0 calc(100% - 10px)
+            );
+            pointer-events: none;
+        }
+
+        .header {
+            background: linear-gradient(90deg, rgba(255,0,0,0.1), rgba(255,0,0,0.2), rgba(255,0,0,0.1));
+            color: var(--primary-color);
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-status {
+            font-size: 0.8em;
+            display: flex;
+            gap: 15px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 5px var(--primary-color);
+        }
+
+        .blink { animation: blink 1s infinite; }
+        .blink-slow { animation: blink 3s infinite; }
+
+        .content {
+            padding: 40px;
+            flex-grow: 1;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px var(--primary-color);
+            letter-spacing: 5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--secondary-color);
+            font-size: 0.9em;
+            margin-bottom: 40px;
+            opacity: 0.8;
+        }
+
+        .search-box {
+            display: flex;
+            margin-bottom: 30px;
+            border: 1px solid var(--primary-color);
+            background: rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .search-box::before {
+            content: ">";
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            color: var(--primary-color);
+            font-size: 1.2em;
+        }
+
+        input[type="text"] {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            padding: 15px 15px 15px 40px;
+            color: white;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.2em;
+            outline: none;
+            text-transform: uppercase;
+        }
+
+        button {
+            background: rgba(255, 0, 0, 0.15);
+            border: none;
+            border-left: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 0 40px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background: var(--primary-color);
+            color: black;
+            box-shadow: 0 0 15px var(--primary-color);
+        }
+
+        .results-area {
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            background: rgba(255,0,0,0.02);
+            position: relative;
+        }
+
+        .results-area::before {
+            content: "DATA_RETRIEVAL_COMPLETE";
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: var(--bg-color);
+            padding: 0 10px;
+            font-size: 0.8em;
+            color: var(--secondary-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px;
+            border-bottom: 2px solid var(--primary-color);
+            color: var(--secondary-color);
+            font-size: 0.9em;
+            letter-spacing: 1px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #330000;
+            color: #ddd;
+        }
+
+        tr:hover td {
+            background-color: rgba(255, 50, 50, 0.1);
+            color: #fff;
+        }
+
+        .error-message {
+            border: 1px solid red;
+            background: rgba(255, 0, 0, 0.1);
+            color: #ff5555;
+            padding: 20px;
+            margin-top: 20px;
+            font-family: monospace;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .footer {
+            padding: 15px;
+            text-align: center;
+            font-size: 0.7em;
+            color: #555;
+            border-top: 1px solid #330000;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .legal {
+            opacity: 0.5;
+            font-size: 0.9em;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #500; border: 1px solid #800; }
+        ::-webkit-scrollbar-thumb:hover { background: #f00; }
+    </style>
+</head>
+<body>
+    <div class="terminal-container">
+        <div class="header">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <span style="font-size:1.5em;">❖</span>
+                <span>IMPERIAL ARCHIVE NODE 0X-1138</span>
+            </div>
+            <div class="header-status">
+                <span>NET: <span class="status-dot blink"></span></span>
+                <span>DB: <span class="status-dot blink-slow"></span></span>
+                <span>SEC: HIGH</span>
+            </div>
+        </div>
+        
+        <div class="content">
+            <h1>GALACTIC ARCHIVES</h1>
+            <div class="subtitle">
+                AUTHORIZED ACCESS ONLY // VIOLATION PUNISHABLE BY IMPERIAL CODE 18.2
+            </div>
+
+            <p style="margin-bottom: 20px; border-left: 2px solid var(--primary-color); padding-left: 15px; color: #aaa;">
+                WELCOME, OFFICER. ENTER PLANETARY DESIGNATION TO RETRIEVE CLIMATE AND TERRAIN DATA.
+                ENSURE YOUR SECURITY CLEARANCE TOKEN IS ACTIVE.
+            </p>
+
+            <form action="/search" method="POST">
+                <div class="search-box">
+                    <input type="text" name="query" placeholder="ENTER SYSTEM NAME..." value="{{ query }}" autocomplete="off" autofocus>
+                    <button type="submit">SEARCH ARCHIVES</button>
+                </div>
+            </form>
+
+            {% if error %}
+            <div class="error-message">
+                <span style="font-size: 2em;">⚠</span>
+                <div>
+                    <strong>CRITICAL SYSTEM ERROR</strong><br>
+                    QUERY PARSING FAILED. DUMP: {{ error }}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if results %}
+            <div class="results-area">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>SYSTEM NAME</th>
+                            <th>CLIMATIC CONDITIONS</th>
+                            <th>SURFACE TERRAIN</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in results %}
+                        <tr>
+                            <td>{{ row[0] }}</td>
+                            <td>{{ row[1] }}</td>
+                            <td>{{ row[2] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="footer">
+            <div>PROPERTY OF THE GALACTIC EMPIRE // FOR OFFICIAL USE ONLY</div>
+            <div class="legal">
+                NON-COMMERCIAL FAN PROJECT. NOT AFFILIATED WITH LUCASFILM LTD. STAR WARS IS A REGISTERED TRADEMARK OF LUCASFILM LTD.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

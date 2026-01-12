@@ -1,0 +1,20 @@
+{
+  "name": "Jedi archives",
+  "version": "1.0.0",
+  "description": "SSRF+JWT Auth",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "th3mujd11",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "ejs": "^3.1.9",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "node-fetch": "^3.3.2"
+  }
+}

@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Jedi Council Bulletin Board</title>
+  <style>
+    body { background:#061025; color:#e6f7ff; font-family: Arial, sans-serif; padding:20px }
+    .post { background:#092233; padding:12px; margin:8px 0; border-radius:6px }
+    h1 { color:#ffd24a }
+    .hint { color:#9fe7ff; font-size:0.9em }
+  </style>
+</head>
+<body>
+  <h1>Jedi Council — Bulletin Board</h1>
+  <% if (user) { %>
+    <p class="hint">You are logged in as <strong><%= user.username %></strong> (role: <%= user.role %>)</p>
+  <% } else { %>
+    <p class="hint">You are not logged in. POST to <code>/login</code> to get a padawan token.</p>
+  <% } %>
+
+  <h2>Posts</h2>
+  <% posts.forEach(p => { %>
+    <div class="post">
+      <h3><%= p.title %></h3>
+      <p><%= p.content %></p>
+    </div>
+  <% }) %>
+
+  <hr />
+  <h3>Holonet Fetcher</h3>
+  <p class="hint">(Try fetching internal resources with <code>/fetch?url=&lt;url&gt;</code> — but note there is a domain policy in place.)</p>
+  <form method="get" action="/fetch" style="margin-top:8px">
+    <input name="url" style="width:60%" placeholder="https://trusted.example/resource" />
+    <button type="submit">Fetch</button>
+  </form>
+</body>
+</html>

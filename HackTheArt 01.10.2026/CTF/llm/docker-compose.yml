@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  llm-ctf:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      # Mounts your local folder to the container so you can edit code live
+      - .:/app
+    environment:
+      # Pass the API key from your local system/env file into the container
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    # Optional: Read directly from your .env file
+    env_file:
+      - .env

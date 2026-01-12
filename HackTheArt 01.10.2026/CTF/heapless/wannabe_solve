@@ -1,0 +1,17 @@
+fn main() {
+    use std::fs::File;
+    use std::io::Read; 
+
+    let mut f = File::open("flag.txt").unwrap();
+
+    let mut buffer = [0u8; 64];
+
+    f.read(&mut buffer).unwrap();
+
+     
+    let s = std::str::from_utf8(&buffer).unwrap();
+
+   
+    print!("{}", s);
+}
+

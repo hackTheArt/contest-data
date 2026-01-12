@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  slobozi-ctf:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      # Mounts your local folder to the container so you can edit code live
+      - .:/app

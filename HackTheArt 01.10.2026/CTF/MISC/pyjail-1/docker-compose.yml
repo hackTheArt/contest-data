@@ -1,0 +1,5 @@
+services:
+  pyjail-1:
+    build: .
+    ports:
+      - "1337:1337"

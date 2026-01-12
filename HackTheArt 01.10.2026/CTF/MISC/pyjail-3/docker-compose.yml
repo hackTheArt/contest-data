@@ -1,0 +1,7 @@
+services:
+  pyjail-3:
+    build: .
+    ports:
+      - "1339:1337"
+    environment:
+      - FLAG=HCS{14M8D4_8r1N65_Y0U_0N3_5H311_M0r3}

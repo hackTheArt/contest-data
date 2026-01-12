@@ -1,0 +1,3 @@
+Train mission si bike dau hint inspre GTA San Andreas, iar infinite health da hint inspre cheatcode-ul de infinite health: Down, X, Right, Left, Right, R1, Right, Down, Up, Triangle.
+
+Folosind Keyboard Shift Cipher de un key in pattern-ul din cheatcode: Down,  Right, Left, Right,  Right, Down, Up, se decodeaza flagul.

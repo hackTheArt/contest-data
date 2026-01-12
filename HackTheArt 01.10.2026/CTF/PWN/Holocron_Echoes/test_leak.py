@@ -9,8 +9,7 @@ def check_offset_1():
     p.sendline(b'1')
     p.recvuntil(b'Transmit data: ')
     
-    # Send pattern
-    # Leak Offset 1 and Offset 9
+
     p.sendline(b'%1$p %9$p')
     
     p.recvuntil(b'The archives echo back: ')

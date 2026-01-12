@@ -10,24 +10,23 @@ def generate_challenge(input_wav, output_iq):
     if audio_data.dtype == np.int16:
         audio_data = audio_data / 32768.0
 
-    rf_samp_rate = 1_000_000  # 1 MSPS
+    rf_samp_rate = 1_000_000  
     upsample_factor = int(rf_samp_rate / samp_rate_audio)
 
     print(f"Upsampling by {upsample_factor}x...")
     audio_upsampled = np.repeat(audio_data, upsample_factor)
 
     print("Modulating to NFM...")
-    f_deviation = 5000.0  # 5kHz deviation (Standard NFM)
+    f_deviation = 5000.0  
 
     phase = 2 * np.pi * f_deviation * np.cumsum(audio_upsampled) / rf_samp_rate
-    iq_signal = np.exp(1j * phase)  # This creates the Complex IQ
+    iq_signal = np.exp(1j * phase)  
 
 
     print("Applying simulated Doppler drift...")
     duration_sec = len(iq_signal) / rf_samp_rate
     t = np.linspace(0, duration_sec, len(iq_signal))
 
-    # Create a frequency curve that moves over time
     freq_drift = np.linspace(-10000, 10000, len(iq_signal))  # Hz
 
    

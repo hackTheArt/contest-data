@@ -35,13 +35,11 @@ int main(void) {
       61,  67,  71,  73,  79,  83,  89,  97,  101, 103, 107, 109, 113,
       127, 131, 137, 149, 151, 157, 163, 167, 173, 179, 191, 199};
 
-  /* sanity check */
   if (FLAG_LEN != sizeof(offsets) / sizeof(offsets[0])) {
     puts("Firmware corrupted.");
     return 0;
   }
 
-  /* mix flag into firmware */
   uint32_t s2 = 0xC0FFEEu;
   for (size_t i = 0; i < FLAG_LEN; i++) {
     uint8_t real_flag_byte = enc_flag[i] ^ 0x55;

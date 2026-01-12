@@ -15,7 +15,7 @@ void print_flag(void) {
   puts(buf);
 }
 
-/* decoy functionality */
+
 void status(void) {
   puts("[+] Reactor status: STABLE");
   puts("[+] Core temperature nominal");
@@ -28,12 +28,12 @@ void diagnostics(void) {
 
 void coolant(void) { puts("[!] Coolant valves locked by Imperial protocol"); }
 
-/* vulnerable path */
+
 void override(void) {
   char buf[64];
   puts("[!!] Manual override engaged");
   puts("Enter override code:");
-  fgets(buf, 256, stdin); // BOF (intentional)
+  fgets(buf, 256, stdin); 
   puts("Override rejected.");
 }
 

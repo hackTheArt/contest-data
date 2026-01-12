@@ -5,7 +5,6 @@ def init_db():
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
 
-    # Create table for normal data
     c.execute("""CREATE TABLE IF NOT EXISTS planets (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     name TEXT NOT NULL,
@@ -13,14 +12,12 @@ def init_db():
                     terrain TEXT NOT NULL
                 )""")
 
-    # Create table for the flag
     c.execute("""CREATE TABLE IF NOT EXISTS imperial_secrets (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     secret_type TEXT NOT NULL,
                     code TEXT NOT NULL
                 )""")
 
-    # Insert sample data
     planets = [
         ("Tatooine", "Arid", "Desert"),
         ("Hoth", "Frozen", "Tundra, Ice Caves"),

@@ -7,7 +7,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Initialize the database
 RUN python init_db.py
 
 EXPOSE 5000

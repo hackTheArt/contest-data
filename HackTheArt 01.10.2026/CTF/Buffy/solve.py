@@ -4,7 +4,6 @@ from pwn import *
 
 context.binary = './buffy'
 
-# target = remote(host, port)
 
 target = process('./buffy')
 

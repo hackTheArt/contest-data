@@ -12,7 +12,6 @@ COPY flag.txt .
 
 RUN chmod +x reactor
 
-# Create a non-privileged user
 RUN useradd -m ctf
 USER ctf
 

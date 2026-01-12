@@ -41,8 +41,6 @@ def main():
 
     user_code = "".join(code_lines)
 
-    # 2. The Ban Hammer (No Heap Allowed)
-    # We blacklist types and methods that return heap-allocated structures.
     blacklist = [
         "String", "Vec", "Box", 
         "read_to_string", "to_string", 
@@ -60,12 +58,6 @@ def main():
     src_file = f"/tmp/stack_{rand_str}.rs"
     bin_file = f"/tmp/stack_{rand_str}"
 
-    # 4. Wrap Code
-    # We don't need to wrap it in main if we expect the user to write main,
-    # but wrapping ensures we can control attributes if needed.
-    # However, for this solution, let's let the user write the full fn main.
-    # We just ensure they didn't sneak in imports outside the check logic.
-    
     full_code = user_code
 
     try:
@@ -74,7 +66,6 @@ def main():
     except Exception:
         return
 
-    # 5. Compile
     print("\n[*] Compiling on embedded system...")
     try:
         compile_proc = subprocess.run(
@@ -93,7 +84,6 @@ def main():
         print("[-] Compilation timed out.")
         return
 
-    # 6. Execute
     print("[*] Executing...")
     sys.stdout.flush()
     try:
@@ -111,7 +101,6 @@ def main():
     except subprocess.TimeoutExpired:
         print("[-] Execution timed out.")
 
-    # Cleanup
     try:
         if os.path.exists(src_file): os.remove(src_file)
         if os.path.exists(bin_file): os.remove(bin_file)

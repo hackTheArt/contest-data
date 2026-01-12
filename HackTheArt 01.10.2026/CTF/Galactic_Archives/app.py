@@ -26,16 +26,12 @@ def search():
     search_term = ""
     if request.method == 'POST':
         search_term = request.form.get('query', '')
-        
-        # VULNERABLE CODE: Direct string concatenation
-        # This allows SQL injection via the 'query' parameter
         query = f"SELECT name, climate, terrain FROM planets WHERE name LIKE '%{search_term}%'"
         
         try:
             cur = get_db().execute(query)
             results = cur.fetchall()
         except Exception as e:
-            # Returning the error helps sqlmap identify the vulnerability type (Error-based SQLi)
             return render_template('index.html', error=str(e), query=search_term)
 
     return render_template('index.html', results=results, query=search_term)
